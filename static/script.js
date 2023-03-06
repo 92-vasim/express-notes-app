@@ -1,4 +1,5 @@
 console.log("Page is running")
+// showNotes()
 
 // Creating a function to get request
 const getRequest = async (url) => {
@@ -28,6 +29,13 @@ async function postData(url = '', data = {}) {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
+
+// Function for delete api 
+
+
+
+
+
 postBtn.addEventListener('click', async () => {
   console.log("Event is clicked")
   let title = document.getElementById("title")
@@ -40,7 +48,7 @@ postBtn.addEventListener('click', async () => {
   title.value = "";
   note.value = "";
   let resp = await postData('/postNote', noteData)
-  console.log(resp)
+  // console.log(resp)
   showNotes();
 })
 
@@ -55,18 +63,39 @@ showNotes = async () => {
   });
   // console.log(notes[0][0].title)
   notes[0].forEach((element, index) => {
-    // console.log(element.title)
+    // console.log(element.id)
 
     tableRow += `
     <tr>
-    <th>${index+1}</th>
-    <td>${element.title}</td>
-    <td>${element.note}</td>
+    <td id="${index + 1}">${index + 1}</td>
+    <td id="elemTitle">${element.title}</td>
+    <td id="elemNote">${element.note}</td>
+    <td><button onclick="deleteNote(this.id)" id="${element.title}" class="btn btn-outline-dark" >Delete</button></td>
   </tr>
     `
+
+    /*
+    Task to delete button
+    1. Delete function for onclick attribute
+    2. Fetching title parameter for function 
+    3. 
+    */
+    deleteNote = async (title) => {
+      console.log("Deleting....",title)
+      data = {
+        "title": title
+      }
+      let deleteResp = await postData("/deleteNote", data)
+      // console.log(deleteResp)
+      showNotes()
+    }
   });
   let tableData = document.getElementById("tableData")
   tableData.innerHTML = tableRow
 }
+
+// Delete element 
+
+
 
 showNotes();

@@ -25,7 +25,7 @@ async function main() {
     3. MongoDB Atlas: for using mongodb in cloud
     */
 
-app.use(express.static('templates'))
+// app.use(express.static('templates'))
 app.use(express.static('static'))
 
 // Middleware assistant for getting data from front end
@@ -45,7 +45,7 @@ const Note = mongoose.model('Note', noteSchema);
 
 // For serving html files
 app.get('/', (req, res) => {
-    res.sendFile("templates/notes.html", { root: __dirname })
+    res.sendFile("notes.html", { root: 'templates' })
 })
 
 // APIs
@@ -61,6 +61,15 @@ app.get('/getNotes', async (req, res) => {
     let notes = await Note.find()
     // console.log("Successfully added")
     res.send(notes)
+})
+
+app.post('/deleteNote', async (req, res) => {
+    let data = req.body
+    // console.log(data)
+    let title = data.title
+    // console.log(title)
+    await Note.deleteOne({title: title})
+    res.status(200).json({ success: true })
 })
 
 app.listen(port, () => {
